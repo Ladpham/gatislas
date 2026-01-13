@@ -40,18 +40,20 @@
     }
 
     /* Le bloc du nombre de nuits */
-    .nights {
-      position: absolute;
+.nights {
+  position: absolute;
 
-      /* ✅ POSITION : ajuste ces 2 valeurs pour coller exactement à ta 2e image */
-      top: 16vh;          /* descend/monte */
-      left: 50%;
-      transform: translateX(-50%);
+  /* ⬇️ descend le chiffre dans le cadre du haut */
+  top: 23vh;
 
-      text-align: center;
-      user-select: none;
-      -webkit-user-select: none;
-    }
+  left: 50%;
+  transform: translateX(-50%);
+
+  text-align: center;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
 
     .num {
       font-family: "Academy Engraved LET", "AcademyEngravedLetPlain", "Times New Roman", serif;
@@ -93,9 +95,8 @@
     <div class="bg"></div>
     <div class="veil"></div>
 
-    <div class="nights" id="nightsBlock" aria-label="Nuits restantes">
+    <div class="nights">
       <div class="num" id="nights">—</div>
-      <div class="label">NUITS</div>
     </div>
   </div>
 
