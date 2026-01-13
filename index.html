@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Décompte — Nos retrouvailles</title>
+
+  <style>
+    :root{
+      --gold: #9a7a2b;            /* or doux proche du cadre */
+      --gold-2: #b7923a;
+      --ink: #1e1e1e;
+      --panel: rgba(255,255,255,.58);
+      --panel-2: rgba(255,255,255,.28);
+      --shadow: 0 14px 40px rgba(0,0,0,.22);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; background: #000; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial; }
+
+    /* Fond */
+    .stage{
+      height: 100%;
+      display: grid;
+      place-items: center;
+      padding: env(safe-area-inset-top) 14px env(safe-area-inset-bottom) 14px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .bg{
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(1200px 900px at 50% 20%, rgba(255,255,255,.10), transparent 60%),
+        linear-gradient(to bottom, rgba(0,0,0,.22), rgba(0,0,0,.40));
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Image en arrière-plan */
+    .cover{
+      position: absolute;
+      inset: 0;
+      background-image: url("background.png"); /* <-- remplace par ton image */
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-size: cover; /* mobile-friendly */
+      z-index: 0;
+      transform: scale(1.02);
+      filter: saturate(1.02) contrast(1.02);
+    }
+
+    /* Pour éviter que le “titre” soit sous la barre du haut sur iPhone */
+    .content{
+      position: relative;
+      z-index: 2;
+      width: min(92vw, 520px);
+      display: grid;
+      gap: 14px;
+      align-items: center;
+      justify-items: center;
+      padding-top: 10px;
+    }
+
+    /* Panneau de décompte */
+    .panel{
+      width: 100%;
+      border-radius: 22px;
+      padding: 18px 18px 16px;
+      background: linear-gradient(180deg, var(--panel), var(--panel-2));
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(154,122,43,.25);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Petit grain doux (style papier) */
+    .panel::after{
+      content:"";
+      position:absolute; inset:-40px;
+      background-image:
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,.16) 0 1px, transparent 2px),
+        radial-gradient(circle at 70% 40%, rgba(0,0,0,.06) 0 1px, transparent 2px),
+        radial-gradient(circle at 40% 80%, rgba(0,0,0,.05) 0 1px, transparent 2px);
+      opacity:.35;
+      transform: rotate(7deg);
+      pointer-events:none;
+    }
+
+    .headline{
+      text-align: center;
+      color: var(--gold);
+      letter-spacing: .28em;
+      font-weight: 700;
+      font-size: clamp(14px, 3.4vw, 18px);
+      text-transform: uppercase;
+      margin: 2px 0 10px;
+      text-shadow: 0 1px 0 rgba(255,255,255,.55);
+    }
+
+    .sub{
+      text-align: center;
+      color: rgba(30,30,30,.75);
+      font-size: clamp(12px, 3vw, 14px);
+      margin-top: -4px;
+      margin-bottom: 12px;
+    }
+
+    .grid{
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    .box{
+      border-radius: 16px;
+      padding: 12px 10px;
+      background: rgba(255,255,255,.62);
+      border: 1px solid rgba(154,122,43,.18);
+      text-align: center;
+      box-shadow: 0 10px 22px rgba(0,0,0,.08);
+    }
+
+    .num{
+      font-variant-numeric: tabular-nums;
+      font-weight: 800;
+      color: var(--ink);
+      font-size: clamp(20px, 6.6vw, 32px);
+      line-height: 1.05;
+    }
+
+    .label{
+      margin-top: 6px;
+      font-size: 11px;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: rgba(154,122,43,.85);
+      font-weight: 700;
+    }
+
+    .footer{
+      margin-top: 12px;
+      text-align: center;
+      color: rgba(30,30,30,.70);
+      font-size: 12px;
+      letter-spacing: .06em;
+    }
+
+    /* Petite signature discrète (optionnelle) */
+    .kiss{
+      margin-top: 10px;
+      text-align: center;
+      color: rgba(154,122,43,.9);
+      font-weight: 700;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      font-size: 11px;
+      text-shadow: 0 1px 0 rgba(255,255,255,.45);
+    }
+
+    /* Ajustement pour très petits écrans */
+    @media (max-width: 360px){
+      .grid{ gap: 8px; }
+      .panel{ padding: 16px 14px 14px; }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="stage">
+    <div class="cover"></div>
+    <div class="bg"></div>
+
+    <section class="content">
+      <div class="panel">
+        <div class="headline">Nos retrouvailles</div>
+        <div class="sub">Je compte les étoiles… et les minutes.</div>
+
+        <div class="grid" aria-label="Décompte">
+          <div class="box">
+            <div class="num" id="days">—</div>
+            <div class="label">Jours</div>
+          </div>
+          <div class="box">
+            <div class="num" id="hours">—</div>
+            <div class="label">Heures</div>
+          </div>
+          <div class="box">
+            <div class="num" id="minutes">—</div>
+            <div class="label">Minutes</div>
+          </div>
+          <div class="box">
+            <div class="num" id="seconds">—</div>
+            <div class="label">Secondes</div>
+          </div>
+        </div>
+
+        <div class="footer" id="targetText"></div>
+        <div class="kiss">✨ Jusqu’à toi ✨</div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // ⚠️ Réglage important :
+    // - Si tu veux que ce soit "7 février à 9h30" dans l'heure locale du téléphone: laisse sans fuseau.
+    // - Si tu veux verrouiller sur un fuseau précis (ex: Abidjan = UTC+0), utilise "+00:00".
+    //
+    // Exemple verrouillé UTC (Abidjan):
+    const target = new Date("2026-02-07T09:30:00+00:00");
+
+    const $days = document.getElementById("days");
+    const $hours = document.getElementById("hours");
+    const $minutes = document.getElementById("minutes");
+    const $seconds = document.getElementById("seconds");
+    const $targetText = document.getElementById("targetText");
+
+    const pad2 = (n) => String(n).padStart(2, "0");
+
+    function formatFR(date){
+      // Affichage lisible (en se basant sur l'heure locale du navigateur)
+      return new Intl.DateTimeFormat("fr-FR", {
+        weekday: "long",
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+      }).format(date);
+    }
+
+    $targetText.textContent = "Rendez-vous : " + formatFR(target);
+
+    function tick(){
+      const now = new Date();
+      let diff = target - now;
+
+      if (diff <= 0){
+        $days.textContent = "0";
+        $hours.textContent = "00";
+        $minutes.textContent = "00";
+        $seconds.textContent = "00";
+        $targetText.textContent = "C’est maintenant. 💛";
+        return;
+      }
+
+      const totalSeconds = Math.floor(diff / 1000);
+      const days = Math.floor(totalSeconds / 86400);
+      const hours = Math.floor((totalSeconds % 86400) / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
+
+      $days.textContent = String(days);
+      $hours.textContent = pad2(hours);
+      $minutes.textContent = pad2(minutes);
+      $seconds.textContent = pad2(seconds);
+    }
+
+    tick();
+    setInterval(tick, 250);
+  </script>
+</body>
+</html>
