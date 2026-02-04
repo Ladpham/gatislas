@@ -12,7 +12,6 @@
       background: #000;
     }
 
-    /* Plein écran, image centrée pour téléphone */
     .stage {
       position: relative;
       height: 100%;
@@ -24,14 +23,13 @@
     .bg {
       position: absolute;
       inset: 0;
-      background-image: url("background2.png"); /* <-- TA 2e image */
+      background-image: url("background2.png"); /* par défaut */
       background-repeat: no-repeat;
       background-position: center center;
       background-size: cover;
       transform: scale(1.01);
     }
 
-    /* Un léger voile pour lisibilité (optionnel) */
     .veil {
       position: absolute;
       inset: 0;
@@ -39,35 +37,24 @@
       pointer-events: none;
     }
 
-    /* Le bloc du nombre de nuits */
-.nights {
-  position: absolute;
-
-  /* ⬇️ descend le chiffre dans le cadre du haut */
-  top: 29vh;
-
-  left: 50%;
-  transform: translateX(-50%);
-
-  text-align: center;
-  user-select: none;
-  -webkit-user-select: none;
-}
-
+    .nights {
+      position: absolute;
+      top: 29vh;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      user-select: none;
+      -webkit-user-select: none;
+      z-index: 2;
+    }
 
     .num {
       font-family: "Academy Engraved LET", "AcademyEngravedLetPlain", "Times New Roman", serif;
       font-weight: 400;
       letter-spacing: 0.02em;
-
-      /* Taille responsive */
       font-size: clamp(56px, 14vw, 104px);
       line-height: 0.95;
-
-      /* Couleur “or” proche du cadre */
       color: #9a7a2b;
-
-      /* Petit relief doux */
       text-shadow:
         0 1px 0 rgba(255,255,255,.55),
         0 10px 26px rgba(0,0,0,.25);
@@ -84,54 +71,236 @@
       opacity: .95;
     }
 
-    /* Si tu veux carrément UNIQUEMENT le nombre : cache le label */
     .hide-label .label { display: none; }
+
+    /* Bouton central (affiché seulement à l'échéance) */
+    .reveal-btn {
+      position: absolute;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 5;
+    }
+
+    .reveal-btn button {
+      font-family: "Academy Engraved LET", "Times New Roman", serif;
+      font-size: clamp(18px, 4.5vw, 26px);
+      padding: 14px 28px;
+      border-radius: 40px;
+      border: 1px solid #9a7a2b;
+      background: rgba(0,0,0,.55);
+      color: #9a7a2b;
+      letter-spacing: 0.12em;
+      cursor: pointer;
+      backdrop-filter: blur(6px);
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+
+    .reveal-btn button:active { transform: scale(0.98); }
+
+    /* Modal */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.75);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      padding: 18px;
+    }
+
+    .modal-content {
+      width: min(700px, 100%);
+      max-height: 82vh;
+      overflow-y: auto;
+      padding: 26px 24px;
+      background: rgba(15,15,15,.95);
+      border: 1px solid #9a7a2b;
+      border-radius: 18px;
+      color: #e8d9a8;
+      font-family: "Times New Roman", serif;
+      line-height: 1.6;
+      box-shadow: 0 30px 80px rgba(0,0,0,.6);
+    }
+
+    .modal-content h2 {
+      text-align: center;
+      letter-spacing: .22em;
+      margin: 0 0 18px 0;
+      font-weight: normal;
+      color: #f1e6bd;
+    }
+
+    .modal-content p { margin: 0 0 14px 0; }
+
+    .modal-close {
+      margin-top: 18px;
+      text-align: center;
+    }
+
+    .modal-close button {
+      background: none;
+      border: none;
+      color: #9a7a2b;
+      font-size: 16px;
+      letter-spacing: .15em;
+      cursor: pointer;
+      padding: 10px 14px;
+    }
   </style>
 </head>
 
 <body>
-  <!-- Ajoute class="hide-label" si tu veux uniquement le chiffre -->
   <div class="stage">
-    <div class="bg"></div>
+    <div class="bg" id="bg"></div>
     <div class="veil"></div>
 
     <div class="nights">
       <div class="num" id="nights">—</div>
     </div>
+
+    <!-- Bouton visible seulement quand nights=0 -->
+    <div class="reveal-btn" id="revealBtn">
+      <button type="button">Lire le poème</button>
+    </div>
+  </div>
+
+  <!-- Popup -->
+  <div class="modal" id="modal" aria-hidden="true">
+    <div class="modal-content" role="dialog" aria-modal="true" aria-label="Poème">
+      <h2>Gatislas</h2>
+
+      <p>
+        À Lyon,<br>
+        il faisait froid dehors<br>
+        et chaud entre nous.<br>
+        Une journée suspendue,<br>
+        de celles qu’on range sans hésiter<br>
+        dans les plus belles.
+      </p>
+
+      <p>
+        Puis il y a eu la distance.<br>
+        On savait qu’elle viendrait,<br>
+        qu’elle demanderait autre chose que l’élan :<br>
+        un rythme,<br>
+        un apprentissage,<br>
+        une façon nouvelle d’être ensemble.
+      </p>
+
+      <p>
+        Deux mains posées l’une sur l’autre —<br>
+        pas pour se retenir,<br>
+        mais pour se rappeler<br>
+        que chacune sait tenir debout seule.<br>
+        Fort·e, indépendant·e,<br>
+        et pourtant là.
+      </p>
+
+      <p>
+        On n’a pas attendu.<br>
+        On a construit.<br>
+        Des appels, des jeux, des questions,<br>
+        des photos du quotidien,<br>
+        des rires surtout.<br>
+        Parfois des heurts,<br>
+        souvent de la joie.<br>
+        Et cette complicité discrète<br>
+        qui rend chaque appel nécessaire.
+      </p>
+
+      <p>
+        La distance crée de la frustration,<br>
+        et la frustration, chez nous,<br>
+        a toujours fait naître l’intensité.<br>
+        Elle aiguise le désir,<br>
+        elle donne du relief,<br>
+        elle prépare la suite.
+      </p>
+
+      <p>
+        Deux engrenages qui tournent,<br>
+        se transforment à chaque rotation.<br>
+        À chaque fois, on regarde :<br>
+        est-ce qu’on avance encore ensemble ?<br>
+        Et pour l’instant, oui.
+      </p>
+
+      <p>
+        Chaque gatislas est plus dense que le précédent.<br>
+        Celui-ci dure trois semaines.<br>
+        Je ne sais pas encore ce qu’il nous réserve,<br>
+        mais j’ai hâte de le vivre avec toi.
+      </p>
+
+      <p>
+        Et puis il fait froid en France.<br>
+        Ça tombe bien :<br>
+        je reviens bientôt pour te réchauffer.
+      </p>
+
+      <div class="modal-close">
+        <button type="button" id="closeModal">Fermer</button>
+      </div>
+    </div>
   </div>
 
   <script>
-    // Verrouillé Abidjan (UTC+0). Change +00:00 si besoin.
+    // Date d’échéance (UTC+0). Ajuste si besoin.
     const target = new Date("2026-02-07T09:30:00+00:00");
 
     const $n = document.getElementById("nights");
+    const $bg = document.getElementById("bg");
+    const $revealBtn = document.getElementById("revealBtn");
+    const $modal = document.getElementById("modal");
+    const $closeModal = document.getElementById("closeModal");
 
-    // "Nombre de nuits" = nombre de changements de date (minuits) entre aujourd’hui et le jour J.
-    // Concrètement: diff entre minuit de demain? Non: on compte les nuits restantes à dormir.
     function nightsRemaining(now, targetDate) {
-      // Minuit local d’aujourd’hui
       const start = new Date(now);
       start.setHours(0,0,0,0);
 
-      // Minuit local du jour du rendez-vous
       const end = new Date(targetDate);
       end.setHours(0,0,0,0);
 
       const diffDays = Math.round((end - start) / 86400000);
-
-      // Si on est déjà le jour J, nuits restantes = 0
-      // Si on est avant le jour J, nuits restantes = diffDays (ex: le 12 -> le 7 = 26 nuits à dormir)
       return Math.max(0, diffDays);
     }
 
-    function tick(){
+    function openModal() {
+      $modal.style.display = "flex";
+      $modal.setAttribute("aria-hidden", "false");
+    }
+
+    function closeModal() {
+      $modal.style.display = "none";
+      $modal.setAttribute("aria-hidden", "true");
+    }
+
+    // interactions
+    $revealBtn.querySelector("button").addEventListener("click", openModal);
+    $closeModal.addEventListener("click", closeModal);
+    $modal.addEventListener("click", (e) => { if (e.target === $modal) closeModal(); });
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
+
+    function tick() {
       const now = new Date();
       const nights = nightsRemaining(now, target);
       $n.textContent = String(nights);
+
+      if (nights === 0) {
+        $bg.style.backgroundImage = 'url("Background3.png")';
+        $revealBtn.style.display = "flex";
+      } else {
+        $bg.style.backgroundImage = 'url("background2.png")';
+        $revealBtn.style.display = "none";
+        closeModal();
+      }
     }
 
     tick();
-    setInterval(tick, 60_000); // une fois par minute suffit
+    setInterval(tick, 60_000);
   </script>
 </body>
 </html>
